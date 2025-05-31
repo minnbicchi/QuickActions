@@ -1,19 +1,25 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace MinnBicchi.SupportedPlugins
 {
-    public class SupportedPlugin
+    public abstract class SupportedPlugin<TPluginActions> where TPluginActions : PluginActions, new()
     {
-        protected JSONStorable _storable;
+        protected readonly JSONStorable _storable;
         protected QuickActions _script;
         protected string _parentUid;
+        protected Regex _actionParser;
+        protected TPluginActions _pluginActions;
 
         public SupportedPlugin(JSONStorable storable, string parentUid, QuickActions script)
         {
             _storable = storable;
             _script = script;
             _parentUid = parentUid;
+            _pluginActions = new TPluginActions();
         }
 
         public string Name()
@@ -21,9 +27,6 @@ namespace MinnBicchi.SupportedPlugins
             return _storable.name + " QuickActions";
         }
 
-        public virtual IEnumerator InitActions(JSONStorable parentStorable)
-        {
-            yield return new WaitForEndOfFrame();
-        }
+        public abstract IEnumerator<WaitForEndOfFrame> InitActions(JSONStorable actionStorable);
     }
 }

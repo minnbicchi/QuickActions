@@ -2,7 +2,9 @@
 namespace MinnBicchi.Managers
 {
     using SupportedPlugins;
-    public class Manager<T> where T : SupportedPlugin
+    public class Manager<T,TPluginActions> 
+        where TPluginActions: PluginActions, new()
+        where T : SupportedPlugin<TPluginActions>
     {
         private List<T> _plugins = new List<T>();
         private JSONStorableString _parentUid;

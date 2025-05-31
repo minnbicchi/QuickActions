@@ -14,9 +14,9 @@ namespace MinnBicchi.SupportedPlugins
             "Vinput.AutoThruster",
             "VamTimeline.AtomPlugin"
         };
-
-        private Dictionary<string, Manager<SupportedPlugin>> _unmanagedPlugins = new Dictionary<string, Manager<SupportedPlugin>>();
-        private Dictionary<string, Manager<DockedUIPlugin>> _managedDockedUIPlugins = new Dictionary<string, Manager<DockedUIPlugin>>();
+        
+        private Dictionary<string, Manager<DockedUIPlugin, DockedUIPluginActions>> _managedDockedUIPlugins = 
+            new Dictionary<string, Manager<DockedUIPlugin,DockedUIPluginActions>>();
         private QuickActions _script;
 
         public SupportedPluginManager(QuickActions script)
@@ -37,22 +37,13 @@ namespace MinnBicchi.SupportedPlugins
                             case "VamEssentials.DockedUI":
                                 if (!_managedDockedUIPlugins.ContainsKey(parent.uid))
                                 {
-                                    _managedDockedUIPlugins[parent.uid] = new Manager<DockedUIPlugin>(parent, _script);
+                                    _managedDockedUIPlugins[parent.uid] = 
+                                        new Manager<DockedUIPlugin, DockedUIPluginActions>(parent, _script);
                                 }
                                 _managedDockedUIPlugins[parent.uid].AddPlugin(
                                     new DockedUIPlugin(parent.GetStorableByID(jsonStoreID), parent.uid, _script)
                                     );
                                 SuperController.LogMessage("Found managed plugin: " + jsonStoreID + "on: " + parent.uid);
-                                break;
-                            default:
-                                if (!_unmanagedPlugins.ContainsKey(parent.uid))
-                                {
-                                    _unmanagedPlugins[parent.uid] = new Manager<SupportedPlugin>(parent, _script);
-                                }
-                                _unmanagedPlugins[parent.uid].AddPlugin(
-                                    new SupportedPlugin(parent.GetStorableByID(jsonStoreID), parent.uid, _script)
-                                    );
-                                SuperController.LogMessage("Found unmanaged plugin: " + jsonStoreID + "on: " + parent.uid);
                                 break;
                         }
                     }

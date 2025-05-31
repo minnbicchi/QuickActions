@@ -1,5 +1,6 @@
 ﻿QuickActions.cs
 SupportedPlugins/SupportedPlugin.cs
 SupportedPlugins/DockedUIPlugin.cs
+SupportedPlugins/HelperClasses.cs
 SupportedPlugins/SupportedPluginManager.cs
 Managers/Manager.cs
